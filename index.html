@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escape Game Horreur a Paris - 100 min d'immersion | UrbeXscape</title>
+  <meta name="description" content="Le plus grand escape game horreur de Paris. 100 minutes d'immersion totale avec comediens live. 1 a 6 joueurs. Reservez maintenant.">
+  <link rel="icon" href="https://static.tildacdn.net/tild3330-3239-4934-a636-353637343138/URBEX_logo-01_1.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #000000;
+      --dark: #0a0a0a;
+      --dark-grey: #111111;
+      --red: #ca0c0c;
+      --red-hover: #e01010;
+      --white: #ffffff;
+      --grey: #999999;
+      --light-grey: #cccccc;
+      --font-display: 'Creepster', cursive;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --header-h: 56px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; cursor: pointer; font-family: inherit; }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: transform 0.3s ease;
+    }
+    .header.header--hidden { transform: translateY(-100%); }
+    .header__logo img { height: 32px; width: auto; }
+    .header__actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-reserve-header {
+      background: var(--red); color: var(--white);
+      font-size: 13px; font-weight: 600;
+      padding: 10px 20px; border-radius: 50px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    .btn-reserve-header:hover { background: var(--red-hover); }
+
+    .hamburger {
+      display: flex; flex-direction: column; gap: 5px;
+      background: none; padding: 10px; cursor: pointer;
+    }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+
+    /* ===== MOBILE MENU ===== */
+    .mobile-menu {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.97);
+      z-index: 999; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 32px;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .mobile-menu.active { opacity: 1; pointer-events: all; }
+    .mobile-menu__close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--white); color: var(--black);
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700;
+    }
+    .mobile-menu a { font-family: var(--font-display); font-size: 28px; letter-spacing: 2px; color: var(--white); transition: color 0.2s; }
+    .mobile-menu a:hover { color: var(--red); }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 20px 32px; overflow: hidden;
+    }
+    .hero__bg {
+      position: absolute; inset: 0;
+      background: url('https://static.tildacdn.net/tild6565-3062-4963-b936-643135346462/light_1.jpg') center/cover no-repeat;
+      z-index: 0;
+    }
+    .hero__bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.95) 100%);
+    }
+    .hero__content { position: relative; z-index: 1; text-align: center; }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 9vw, 52px);
+      line-height: 1.1; letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .hero__title span { color: var(--red); }
+
+    .hero__sub {
+      font-size: 13px; color: var(--light-grey); font-weight: 300;
+      letter-spacing: 0.3px; margin-bottom: 20px; line-height: 1.5;
+    }
+
+    .hero__badges {
+      display: flex; justify-content: center;
+      gap: 10px; margin-bottom: 20px;
+    }
+    .badge {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      padding: 6px 12px; border-radius: 6px;
+      font-size: 12px; font-weight: 500; color: var(--light-grey);
+      white-space: nowrap;
+    }
+
+    /* Video embed in hero */
+    .hero__video {
+      margin-bottom: 24px; border-radius: 10px; overflow: hidden;
+      aspect-ratio: 16/9; background: var(--dark-grey);
+      position: relative;
+    }
+    .hero__video img { width: 100%; height: 100%; object-fit: cover; }
+    .hero__video .play-btn {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.35);
+    }
+    .play-icon {
+      width: 56px; height: 56px; background: var(--red);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .play-icon::after {
+      content: ''; width: 0; height: 0;
+      border-style: solid; border-width: 10px 0 10px 18px;
+      border-color: transparent transparent transparent var(--white);
+      margin-left: 3px;
+    }
+
+    /* Social proof ticker in hero */
+    .hero__proof {
+      font-size: 12px; color: var(--grey); margin-bottom: 16px;
+      letter-spacing: 0.3px;
+    }
+    .hero__proof strong { color: var(--light-grey); font-weight: 600; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--red); color: var(--white);
+      font-size: 16px; font-weight: 700;
+      padding: 16px 40px; border-radius: 50px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      width: 100%; max-width: 340px;
+      transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary:hover { background: var(--red-hover); transform: scale(1.02); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-primary--ghost {
+      background: transparent; border: 1px solid rgba(255,255,255,0.2);
+      font-size: 13px; padding: 12px 24px; margin-top: 10px;
+      font-weight: 500; text-transform: none; letter-spacing: 0;
+    }
+    .btn-primary--ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+
+    /* ===== ANNOUNCEMENT BAR ===== */
+    .announce {
+      background: var(--red); text-align: center;
+      padding: 10px 16px; font-size: 13px; font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .announce a { text-decoration: underline; font-weight: 600; }
+
+    /* ===== GALLERY (swipe) ===== */
+    .gallery { padding: 0; overflow: hidden; }
+    .gallery__scroll {
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .gallery__scroll::-webkit-scrollbar { display: none; }
+    .gallery__item { flex: 0 0 75%; scroll-snap-align: center; padding: 6px; }
+    .gallery__item img { width: 100%; height: 220px; object-fit: cover; border-radius: 10px; }
+
+    /* ===== STORY ===== */
+    .story { padding: 48px 20px; background: var(--black); }
+    .section-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 3px;
+      color: var(--red); font-weight: 600; margin-bottom: 14px; text-align: center;
+    }
+    .story__title {
+      font-family: var(--font-display); font-size: 26px; line-height: 1.2;
+      margin-bottom: 20px; text-align: center;
+    }
+    .story__text { color: var(--light-grey); font-size: 15px; line-height: 1.8; font-weight: 300; }
+    .story__text p { margin-bottom: 14px; }
+    .story__text strong { color: var(--white); font-weight: 500; }
+
+    .story__narrator {
+      margin-top: 28px; padding: 20px;
+      background: rgba(202,12,12,0.08); border-left: 3px solid var(--red);
+      border-radius: 0 8px 8px 0;
+      font-style: italic; color: var(--light-grey); font-size: 14px; line-height: 1.7;
+    }
+    .narrator-name { display: block; margin-top: 10px; color: var(--red); font-weight: 600; font-style: normal; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ===== USP CARDS (with background images) ===== */
+    .usp { padding: 48px 0; background: var(--black); }
+    .usp__title { font-family: var(--font-display); font-size: 26px; text-align: center; margin-bottom: 28px; padding: 0 20px; }
+
+    .usp-card {
+      position: relative; overflow: hidden;
+      min-height: 320px; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 24px 20px;
+      margin-bottom: 4px;
+    }
+    .usp-card__bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      z-index: 0;
+    }
+    .usp-card__bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 70%, rgba(0,0,0,0.95) 100%);
+    }
+    .usp-card__content { position: relative; z-index: 1; }
+    .usp-card__title {
+      font-family: var(--font-display); font-size: 22px;
+      margin-bottom: 8px; text-align: center; line-height: 1.2;
+    }
+    .usp-card__text { font-size: 14px; color: var(--light-grey); line-height: 1.6; text-align: left; }
+
+    /* ===== RATINGS ===== */
+    .ratings { padding: 48px 20px; background: var(--dark); }
+    .ratings__title { font-family: var(--font-display); font-size: 24px; text-align: center; margin-bottom: 6px; }
+    .ratings__subtitle { text-align: center; color: var(--grey); font-size: 14px; margin-bottom: 24px; }
+
+    .ratings__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .rating-card {
+      background: var(--dark-grey); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; padding: 16px 10px; text-align: center;
+    }
+    .rating-card__score { font-family: var(--font-display); font-size: 32px; color: var(--red); line-height: 1; }
+    .rating-card__stars { color: #f5a623; font-size: 13px; margin: 4px 0; letter-spacing: 2px; }
+    .rating-card__source { font-size: 11px; color: var(--grey); font-weight: 500; }
+
+    /* ===== REVIEWS ===== */
+    .reviews { padding: 48px 20px; background: var(--black); }
+    .reviews__title { font-family: var(--font-display); font-size: 22px; text-align: center; margin-bottom: 6px; }
+    .reviews__subtitle { text-align: center; color: var(--grey); font-size: 13px; margin-bottom: 20px; }
+
+    .reviews__scroll {
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; gap: 12px; scrollbar-width: none;
+    }
+    .reviews__scroll::-webkit-scrollbar { display: none; }
+
+    .review-card {
+      flex: 0 0 88%; scroll-snap-align: start;
+      background: var(--dark-grey); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; padding: 20px 16px;
+    }
+    .review-card__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .review-card__author { font-weight: 600; font-size: 14px; }
+    .review-card__date { font-size: 11px; color: var(--grey); }
+    .review-card__stars { color: #f5a623; font-size: 12px; margin-bottom: 10px; letter-spacing: 1px; }
+    .review-card__text { font-size: 14px; color: var(--light-grey); line-height: 1.6; }
+
+    /* FOMO testimonial */
+    .fomo-quote {
+      margin-top: 20px; padding: 16px;
+      background: rgba(202,12,12,0.06); border-radius: 10px;
+      text-align: center; font-size: 14px; color: var(--light-grey);
+      font-style: italic; line-height: 1.6;
+    }
+    .fomo-quote .fomo-author { display: block; margin-top: 8px; font-style: normal; font-size: 12px; color: var(--grey); font-weight: 500; }
+
+    /* Share CTA */
+    .share-cta {
+      text-align: center; margin-top: 24px;
+    }
+    .btn-share {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #25d366; color: var(--white);
+      padding: 12px 24px; border-radius: 50px;
+      font-size: 14px; font-weight: 600; transition: opacity 0.2s;
+    }
+    .btn-share:hover { opacity: 0.9; }
+
+    /* ===== PRICE ANCHOR ===== */
+    .price-section { padding: 48px 20px; background: var(--dark); }
+    .price-section__title { font-family: var(--font-display); font-size: 24px; text-align: center; margin-bottom: 8px; }
+    .price-section__hook {
+      text-align: center; color: var(--grey); font-size: 14px;
+      margin-bottom: 24px; line-height: 1.6;
+    }
+    .price-section__hook strong { color: var(--light-grey); }
+
+    .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .price-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 14px 10px; text-align: center;
+      transition: border-color 0.2s;
+    }
+    .price-card:last-child { border-color: var(--red); }
+    .price-card__players { font-size: 11px; color: var(--grey); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .price-card__amount { font-family: var(--font-display); font-size: 26px; color: var(--red); }
+    .price-card__per { font-size: 11px; color: var(--grey); }
+
+    .price-micro {
+      text-align: center; font-size: 13px; color: var(--grey);
+      margin-bottom: 20px; line-height: 1.5;
+    }
+    .price-micro strong { color: var(--light-grey); }
+
+    .price-compare {
+      text-align: center; font-size: 13px; color: var(--grey);
+      margin-top: 12px; line-height: 1.6; font-style: italic;
+    }
+
+    /* ===== BOOKING ===== */
+    .booking { padding: 48px 20px 40px; background: var(--black); }
+    .booking__title { font-family: var(--font-display); font-size: 26px; text-align: center; margin-bottom: 6px; }
+    .booking__subtitle { text-align: center; color: var(--grey); font-size: 13px; margin-bottom: 12px; }
+
+    .booking__urgency {
+      text-align: center; font-size: 13px; color: var(--light-grey);
+      background: rgba(202,12,12,0.08); border: 1px solid rgba(202,12,12,0.15);
+      border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; line-height: 1.5;
+    }
+
+    .booking__warning {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 12px; color: var(--grey); margin-bottom: 20px; line-height: 1.5;
+    }
+
+    .booking__iframe-wrapper {
+      background: var(--dark-grey); border-radius: 10px; overflow: hidden;
+    }
+    .booking__iframe-wrapper iframe { width: 100%; min-height: 520px; border: none; }
+
+    /* ===== REGRET / LOSS AVERSION ===== */
+    .regret {
+      padding: 40px 20px; background: var(--dark);
+      text-align: center;
+    }
+    .regret__text {
+      font-size: 15px; color: var(--light-grey); line-height: 1.7;
+      max-width: 340px; margin: 0 auto 20px;
+    }
+    .regret__text strong { color: var(--white); font-weight: 600; }
+
+    /* ===== BLACK OUT ===== */
+    .blackout {
+      padding: 48px 20px; text-align: center;
+      position: relative; overflow: hidden;
+      background: url('https://static.tildacdn.net/tild6562-6165-4235-b464-373738363466/bg_dark_m_1.webp') center/cover no-repeat;
+    }
+    .blackout::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.75);
+    }
+    .blackout > * { position: relative; z-index: 1; }
+    .blackout__badge {
+      display: inline-block; background: var(--red); color: var(--white);
+      font-size: 11px; font-weight: 700; padding: 4px 12px;
+      border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .blackout__title { font-family: var(--font-display); font-size: 34px; letter-spacing: 3px; margin-bottom: 10px; }
+    .blackout__text { color: var(--grey); font-size: 14px; margin-bottom: 6px; }
+    .blackout__date { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .blackout__fomo { font-size: 12px; color: var(--grey); margin-bottom: 20px; font-style: italic; }
+    .btn-instagram {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: var(--white); font-size: 14px; font-weight: 600;
+      padding: 12px 28px; border-radius: 50px; transition: opacity 0.2s;
+    }
+    .btn-instagram:hover { opacity: 0.9; }
+
+    /* ===== GIFT ===== */
+    .gift { padding: 48px 20px; background: var(--dark); text-align: center; }
+    .gift__title { font-family: var(--font-display); font-size: 22px; margin-bottom: 10px; line-height: 1.3; text-align: center; }
+    .gift__text { color: var(--grey); font-size: 14px; margin-bottom: 20px; max-width: 300px; margin-left: auto; margin-right: auto; }
+
+    /* ===== SPECIAL ===== */
+    .special { padding: 40px 20px; background: var(--black); }
+    .special__title { font-family: var(--font-display); font-size: 20px; text-align: center; margin-bottom: 20px; color: var(--red); }
+    .special__items { display: flex; flex-direction: column; gap: 12px; }
+    .special__item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06); border-radius: 10px;
+    }
+    .special__icon { font-size: 24px; flex-shrink: 0; }
+    .special__label { font-size: 14px; font-weight: 500; line-height: 1.4; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 40px 20px calc(76px + var(--safe-bottom));
+      background: var(--dark-grey); border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer__address { text-align: center; margin-bottom: 20px; }
+    .footer__address-line { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .footer__address-metro { font-size: 12px; color: var(--grey); }
+
+    .footer__contact { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .footer__contact-item {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 14px; background: rgba(255,255,255,0.04); border-radius: 10px;
+      font-size: 14px; font-weight: 500; transition: background 0.2s;
+      min-height: 48px;
+    }
+    .footer__contact-item:hover { background: rgba(255,255,255,0.08); }
+
+    .footer__links { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 20px; }
+    .footer__link { font-size: 12px; color: var(--grey); padding: 8px 0; transition: color 0.2s; }
+    .footer__link:hover { color: var(--white); }
+
+    .footer__bottom { text-align: center; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer__logo img { height: 24px; margin: 0 auto 6px; }
+    .footer__copy { font-size: 11px; color: var(--grey); }
+
+    /* ===== STICKY CTA ===== */
+    .sticky-cta {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 10px 16px calc(10px + var(--safe-bottom));
+      background: linear-gradient(to top, rgba(0,0,0,0.98) 70%, transparent);
+      z-index: 900; display: flex; gap: 8px;
+      transform: translateY(100%); transition: transform 0.3s ease;
+    }
+    .sticky-cta.visible { transform: translateY(0); }
+    .sticky-cta__book {
+      flex: 1; background: var(--red); color: var(--white);
+      font-size: 15px; font-weight: 700; padding: 14px;
+      border-radius: 50px; text-align: center; text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .sticky-cta__gift {
+      background: rgba(255,255,255,0.1); color: var(--white);
+      font-size: 13px; font-weight: 600; padding: 14px 16px;
+      border-radius: 50px; white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    /* ===== DESKTOP ===== */
+    @media (min-width: 768px) {
+      :root { --header-h: 70px; }
+      .header { padding: 0 32px; }
+      .header__logo img { height: 38px; }
+      .hamburger { display: none; }
+      .header__nav { display: flex; align-items: center; gap: 28px; }
+      .header__nav-link { font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--white); transition: color 0.2s; }
+      .header__nav-link:hover { color: var(--red); }
+
+      .hero { min-height: 100vh; padding: 0 64px 80px; }
+      .hero__title { font-size: 60px; }
+      .hero__video { max-width: 560px; margin: 0 auto 24px; }
+
+      .gallery__item { flex: 0 0 40%; }
+      .gallery__item img { height: 320px; }
+
+      .story { padding: 64px 32px; max-width: 800px; margin: 0 auto; }
+      .story__title { font-size: 32px; }
+
+      .usp { padding: 64px 20px; }
+      .usp__grid-desktop { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; max-width: 1100px; margin: 0 auto; }
+      .usp-card { min-height: 380px; }
+
+      .ratings { padding: 64px 32px; }
+      .ratings__grid { max-width: 600px; margin: 0 auto; grid-template-columns: repeat(4, 1fr); }
+
+      .reviews { padding: 64px 32px; }
+      .review-card { flex: 0 0 42%; }
+
+      .price-section { padding: 64px 32px; }
+      .price-grid { max-width: 500px; margin: 0 auto 16px; grid-template-columns: repeat(4, 1fr); }
+
+      .booking { padding: 64px 32px; }
+      .booking__iframe-wrapper { max-width: 700px; margin: 0 auto; }
+
+      .special__items { flex-direction: row; max-width: 800px; margin: 0 auto; }
+      .special__item { flex: 1; }
+
+      .footer { padding: 48px 32px; }
+      .footer__contact { flex-direction: row; justify-content: center; }
+      .footer__links { max-width: 500px; margin: 0 auto 24px; grid-template-columns: repeat(4, 1fr); text-align: center; }
+
+      .sticky-cta { display: none; }
+      .mobile-menu { display: none; }
+    }
+    @media (max-width: 767px) {
+      .header__nav { display: none; }
+    }
+
+    @media (min-width: 1024px) {
+      .hero__title { font-size: 72px; }
+      .hero { padding: 0 80px 100px; }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @media (prefers-reduced-motion: no-preference) {
+      .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+      .fade-in.visible { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <a href="#main" class="header__logo">
+      <img src="https://static.tildacdn.net/tild3330-3239-4934-a636-353637343138/URBEX_logo-01_1.png" alt="UrbeXscape" loading="eager">
+    </a>
+    <nav class="header__nav">
+      <a href="#story" class="header__nav-link">Scenario</a>
+      <a href="#ratings" class="header__nav-link">Avis</a>
+      <a href="#pricing" class="header__nav-link">Tarifs</a>
+      <a href="#booking" class="header__nav-link">Reservation</a>
+      <a href="/bon-cadeau" class="header__nav-link">Bon Cadeau</a>
+      <a href="#footer" class="header__nav-link">Contact</a>
+      <a href="/en" style="color:var(--grey);font-size:13px;font-weight:500;padding:6px 10px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;">EN</a>
+    </nav>
+    <div class="header__actions">
+      <a href="#booking" class="btn-reserve-header">Reserver</a>
+      <button class="hamburger" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu__close" id="menuClose" aria-label="Fermer">&times;</button>
+    <a href="#story" onclick="closeMenu()">Scenario</a>
+    <a href="#ratings" onclick="closeMenu()">Avis</a>
+    <a href="#pricing" onclick="closeMenu()">Tarifs</a>
+    <a href="#booking" onclick="closeMenu()">Reserver</a>
+    <a href="#gift" onclick="closeMenu()">Bon Cadeau</a>
+    <a href="#footer" onclick="closeMenu()">Contact</a>
+    <a href="/en" style="font-size:18px;color:var(--grey);">English</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="main">
+    <div class="hero__bg"></div>
+    <div class="hero__content">
+      <h1 class="hero__title">
+        Le plus grand<br>
+        <span>escape game horreur</span><br>
+        de Paris
+      </h1>
+
+      <div class="hero__badges">
+        <div class="badge">1-6 joueurs</div>
+        <div class="badge">100 min</div>
+        <div class="badge">16 ans+</div>
+      </div>
+
+      <!-- Video embed -->
+      <div class="hero__video">
+        <img src="https://static.tildacdn.net/tild6535-3638-4265-b164-366438306131/mask.webp" alt="Bande-annonce UrbeXscape" loading="eager">
+        <a href="#" class="play-btn" aria-label="Lire la bande-annonce"><div class="play-icon"></div></a>
+      </div>
+
+      <!-- Social proof -->
+      <div class="hero__proof">
+        <strong>4 200+ joueurs</strong> depuis l'ouverture &middot; Note moyenne <strong>4.9/5</strong>
+      </div>
+
+      <a href="#booking" class="btn-primary">Choisir mon creneau</a>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery">
+    <div class="gallery__scroll">
+      <div class="gallery__item"><img src="https://static.tildacdn.net/tild6132-6330-4236-b336-323935643235/ph1-_1_.webp" alt="Salle abandonnee" loading="lazy"></div>
+      <div class="gallery__item"><img src="https://static.tildacdn.net/tild6632-6539-4635-b934-346330366262/ph6-_1_.webp" alt="Decor horreur" loading="lazy"></div>
+      <div class="gallery__item"><img src="https://static.tildacdn.net/tild6364-6666-4765-b465-626366323038/ph2-_1_.webp" alt="Atmosphere sombre" loading="lazy"></div>
+      <div class="gallery__item"><img src="https://static.tildacdn.net/tild3031-6264-4637-b636-666266333431/urbex1_1.webp" alt="Vue interieure" loading="lazy"></div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="story fade-in" id="story">
+    <div class="section-label">L'experience commence ici</div>
+    <h2 class="story__title">Je peux vous faire entrer</h2>
+    <div class="story__text">
+      <p>Au coeur de Paris, un ancien escape game — <strong>Team-Time</strong> — a ete abandonne.</p>
+      <p>Depuis des mois, plus personne n'y entre. Officiellement.</p>
+      <p>Des presences ont ete signalees. Des lumieres la nuit. Des bruits.</p>
+      <p>Certains parlent de squatteurs. D'autres disent que le lieu... <strong>n'est pas vide.</strong></p>
+    </div>
+    <div class="story__narrator">
+      Je m'appelle Nox. J'organise des explorations urbex dans des lieux interdits. Je ne garantis pas votre securite. Mais si quelque chose tourne mal... je ferai tout pour vous sortir de la.
+      <span class="narrator-name">-- Nox</span>
+    </div>
+  </section>
+
+  <!-- USP CARDS — atmospheric backgrounds -->
+  <section class="usp fade-in" id="usp">
+    <h2 class="usp__title">Pourquoi choisir UrbeXscape ?</h2>
+
+    <div class="usp-card">
+      <div class="usp-card__bg" style="background-image:url('https://static.tildacdn.net/tild3836-6136-4436-b538-323339333930/casier_1.webp')"></div>
+      <div class="usp-card__content">
+        <h3 class="usp-card__title">Une immersion totale</h3>
+        <p class="usp-card__text">100 minutes sans briefing classique. Communication par talkie-walkie. Des comediens professionnels jouent en live a chaque session. Vous oublierez que c'est un jeu.</p>
+      </div>
+    </div>
+
+    <div class="usp-card">
+      <div class="usp-card__bg" style="background-image:url('https://static.tildacdn.net/tild6634-6264-4563-a132-616532323231/urbex1_1.png')"></div>
+      <div class="usp-card__content">
+        <h3 class="usp-card__title">Exploration urbaine reelle</h3>
+        <p class="usp-card__text">Plongez dans un ancien escape game abandonne, transforme en terrain d'exploration. Ce n'est pas un decor — c'est un vrai lieu de 400 m&sup2;.</p>
+      </div>
+    </div>
+
+    <div class="usp-card">
+      <div class="usp-card__bg" style="background-image:url('https://static.tildacdn.net/tild3061-6561-4534-b831-333330333431/bg_red_1.webp')"></div>
+      <div class="usp-card__content">
+        <h3 class="usp-card__title">Horreur finement maitrisee</h3>
+        <p class="usp-card__text">Pas de jumpscares gratuits. Une tension psychologique constante, une montee en puissance progressive. Chaque session mobilise une equipe dediee — le nombre de sessions par jour est limite.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RATINGS -->
+  <section class="ratings fade-in" id="ratings">
+    <h2 class="ratings__title">Ils ont survecu</h2>
+    <p class="ratings__subtitle">(et ils ont adore)</p>
+    <div class="ratings__grid">
+      <div class="rating-card">
+        <div class="rating-card__score">4.9</div>
+        <div class="rating-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="rating-card__source">escapegame.fr</div>
+      </div>
+      <div class="rating-card">
+        <div class="rating-card__score">5/5</div>
+        <div class="rating-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="rating-card__source">Polygamer</div>
+      </div>
+      <div class="rating-card">
+        <div class="rating-card__score">94%</div>
+        <div class="rating-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="rating-card__source">EscapeGame.fr</div>
+      </div>
+      <div class="rating-card">
+        <div class="rating-card__score">16/20</div>
+        <div class="rating-card__stars">&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="rating-card__source">Meilleur EG</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS + FOMO -->
+  <section class="reviews fade-in">
+    <h2 class="reviews__title">Avis des survivants</h2>
+    <p class="reviews__subtitle">Ils en sont ressortis... transformes</p>
+    <div class="reviews__scroll">
+      <div class="review-card">
+        <div class="review-card__header">
+          <span class="review-card__author">Paillade9</span>
+          <span class="review-card__date">Janvier 2026</span>
+        </div>
+        <div class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-card__text">Sur une cinquantaine d'escape game realises, il est dans le top 3 ! Innovant, immersif et qualitatif. On oublie rapidement qu'on est dans un jeu.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <span class="review-card__author">Rayen B</span>
+          <span class="review-card__date">Janvier 2026</span>
+        </div>
+        <div class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-card__text">On passe vraiment par toutes les emotions. Le meilleur escape game tout confondu ! Nox joue extremement bien son role, on y croit vraiment.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <span class="review-card__author">Julie L</span>
+          <span class="review-card__date">Janvier 2026</span>
+        </div>
+        <div class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-card__text">Une immersion parfaite. Apres une cinquantaine d'escape games, celui-ci est dans mon top 3 absolu. L'experience la plus immersive que j'ai faite.</div>
+      </div>
+    </div>
+
+    <!-- FOMO testimonial -->
+    <div class="fomo-quote">
+      "On a hesite pendant 3 semaines. On aurait du venir plus tot. C'est la meilleure soiree qu'on a passee cette annee."
+      <span class="fomo-author">-- Julien, groupe de 5</span>
+    </div>
+
+    <!-- Share to group -->
+    <div class="share-cta">
+      <p style="font-size:14px;color:var(--grey);margin-bottom:10px;">Vous savez deja avec qui vous voulez vivre ca.</p>
+      <a href="https://wa.me/?text=J%27ai%20trouv%C3%A9%20un%20truc%20pour%20notre%20prochaine%20sortie%20%E2%80%94%20escape%20game%20horreur%20avec%20acteurs%20live%2C%20100%20minutes%2C%20%C3%A0%20Paris.%20On%20y%20va%20%3F%20https%3A%2F%2Furbexscape.paris" class="btn-share" target="_blank" rel="noopener">
+        Envoyer a mon groupe
+      </a>
+    </div>
+  </section>
+
+  <!-- PRICING with anchor -->
+  <section class="price-section fade-in" id="pricing">
+    <h2 class="price-section__title">Tarifs</h2>
+    <p class="price-section__hook">
+      100 minutes d'adrenaline avec comediens live.<br>
+      <strong>Pour le prix de 2 places de cinema.</strong>
+    </p>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="price-card__players">2 joueurs</div>
+        <div class="price-card__amount">80&euro;</div>
+        <div class="price-card__per">/pers.</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card__players">3 joueurs</div>
+        <div class="price-card__amount">70&euro;</div>
+        <div class="price-card__per">/pers.</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card__players">4 joueurs</div>
+        <div class="price-card__amount">60&euro;</div>
+        <div class="price-card__per">/pers.</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card__players">5-6 joueurs</div>
+        <div class="price-card__amount">50&euro;</div>
+        <div class="price-card__per">/pers.</div>
+      </div>
+    </div>
+
+    <p class="price-micro">A partir de <strong>0,50 &euro; la minute</strong> par personne. Plus vous etes, moins ca coute.</p>
+    <p class="price-compare">Un restaurant s'oublie en 2 jours. Cette soiree, votre groupe en parlera pendant des mois.</p>
+
+    <div style="text-align:center;margin-top:20px;">
+      <a href="#booking" class="btn-primary" style="max-width:300px;">Bloquer notre session</a>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="booking" id="booking">
+    <h2 class="booking__title">Reservation</h2>
+    <p class="booking__subtitle">Choisissez votre date et votre creneau</p>
+
+    <div class="booking__urgency">
+      Les vendredis et samedis soir sont generalement complets 5 a 7 jours a l'avance. Reservez tot pour choisir votre creneau.
+    </div>
+
+    <div class="booking__warning">
+      L'eclairage etant instable dans certaines zones, ce jeu est deconseille aux personnes souffrant d'epilepsie photosensible.
+    </div>
+
+    <div class="booking__iframe-wrapper">
+      <iframe src="https://book.urbexscape.paris/?lang=fr-FR" title="Reservation UrbeXscape" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <!-- REGRET / LOSS AVERSION -->
+  <section class="regret fade-in">
+    <p class="regret__text">
+      Dans 3 mois, soit vous aurez vecu cette experience.<br>
+      Soit vous vous direz encore <strong>"faudrait qu'on essaie un jour"</strong>.
+    </p>
+    <a href="#booking" class="btn-primary" style="max-width:260px;margin:0 auto;">On y va</a>
+  </section>
+
+  <!-- BLACK OUT -->
+  <section class="blackout fade-in" id="blackout">
+    <div class="blackout__badge">Nouveau</div>
+    <h2 class="blackout__title">BLACK OUT</h2>
+    <p class="blackout__text">Meme lieu. Nouveau format.</p>
+    <p class="blackout__date">Ouverture prevue : Mai 2026</p>
+    <p class="blackout__fomo">Les anciens joueurs reserveront en priorite.</p>
+    <a href="https://instagram.com/urbexscape.paris" class="btn-instagram" target="_blank" rel="noopener">
+      S'abonner sur Instagram
+    </a>
+  </section>
+
+  <!-- GIFT -->
+  <section class="gift fade-in" id="gift">
+    <h2 class="gift__title">Un cadeau qu'ils ne vous pardonneront pas</h2>
+    <p class="gift__text">Le cadeau ideal, c'est celui qu'on n'oublie jamais. Offrez 100 minutes de frissons.</p>
+    <a href="/bon-cadeau" class="btn-primary" style="max-width:280px;margin:0 auto;">Offrir un bon cadeau</a>
+  </section>
+
+  <!-- SPECIAL -->
+  <section class="special fade-in">
+    <h3 class="special__title">Ici, tout est possible</h3>
+    <div class="special__items">
+      <div class="special__item">
+        <div class="special__icon">&#128694;</div>
+        <div class="special__label">Urbex solo dans un lieu glauque</div>
+      </div>
+      <div class="special__item">
+        <div class="special__icon">&#128247;</div>
+        <div class="special__label">Session photo / creation de contenu</div>
+      </div>
+      <div class="special__item">
+        <div class="special__icon">&#127909;</div>
+        <div class="special__label">Tournage video YouTube</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="footer__address">
+      <div class="footer__address-line">26 rue Richer, 75009 Paris</div>
+      <div class="footer__address-metro">Metros Cadet (7) ou Grands Boulevards (8 et 9)</div>
+    </div>
+    <div class="footer__contact">
+      <a href="tel:+33769930055" class="footer__contact-item">&#128222; 07 69 93 00 55</a>
+      <a href="https://wa.me/33769930055" class="footer__contact-item" target="_blank" rel="noopener">&#128172; WhatsApp</a>
+      <a href="mailto:contact@urbexscape.paris" class="footer__contact-item">&#9993; contact@urbexscape.paris</a>
+    </div>
+    <div class="footer__links">
+      <a href="#" class="footer__link">FAQ</a>
+      <a href="/bon-cadeau" class="footer__link">Bon cadeau</a>
+      <a href="#" class="footer__link">Mentions legales</a>
+      <a href="#" class="footer__link">CGV</a>
+      <a href="#" class="footer__link">Presse</a>
+      <a href="#" class="footer__link">Blog</a>
+      <a href="#" class="footer__link">A propos</a>
+      <a href="#" class="footer__link">Credits</a>
+    </div>
+    <div class="footer__bottom">
+      <a href="#main" class="footer__logo"><img src="https://static.tildacdn.net/tild3965-3632-4339-a561-613463666231/URBEX_logo2-01_1.png" alt="UrbeXscape"></a>
+      <div class="footer__copy">&copy; 2026 UrbeXscape Paris. Tous droits reserves.</div>
+    </div>
+  </footer>
+
+  <!-- STICKY CTA -->
+  <div class="sticky-cta" id="stickyCta">
+    <a href="#booking" class="sticky-cta__book">Choisir mon creneau</a>
+    <a href="/bon-cadeau" class="sticky-cta__gift">Bon cadeau</a>
+  </div>
+
+  <script>
+    // Smart sticky header
+    let lastScroll = 0;
+    const header = document.getElementById('header');
+    const stickyCta = document.getElementById('stickyCta');
+    const heroH = window.innerHeight;
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > lastScroll && y > 80) header.classList.add('header--hidden');
+      else header.classList.remove('header--hidden');
+      if (y > heroH * 0.5) stickyCta.classList.add('visible');
+      else stickyCta.classList.remove('visible');
+      lastScroll = y;
+    }, { passive: true });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuClose = document.getElementById('menuClose');
+    menuToggle.addEventListener('click', () => { mobileMenu.classList.add('active'); document.body.style.overflow = 'hidden'; });
+    function closeMenu() { mobileMenu.classList.remove('active'); document.body.style.overflow = ''; }
+    menuClose.addEventListener('click', closeMenu);
+
+    // Fade-in
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+    } else { document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')); }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e) {
+        const t = document.querySelector(this.getAttribute('href'));
+        if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' }); }
+      });
+    });
+  </script>
+</body>
+</html>
